@@ -4,6 +4,7 @@ namespace Umomega\Former\Support;
 
 use Illuminate\Http\Request;
 use Umomega\Former\Form;
+use Umomega\Former\Answer;
 
 class Surveyor {
 
@@ -25,7 +26,7 @@ class Surveyor {
 		$answer->uuid = \Str::uuid();
 		$answer->ip = $request->ip();
 		$answer->status = 30;
-		$answer->data = $validated;
+		$answer->form_data = json_encode($validated);
 
 		$answer->save();
 

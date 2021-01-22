@@ -8,7 +8,7 @@ use Spatie\Searchable\SearchResult;
 
 class Answer extends Model implements Searchable {
 
-	/**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -30,23 +30,23 @@ class Answer extends Model implements Searchable {
     protected $appends = ['form'];
 
     /**
-	 * Searchable config
-	 *
-	 * @return SearchResult
-	 */
-	public function getSearchResult(): SearchResult
-	{
-		return new SearchResult($this, $this->uuid);
-	}
+     * Searchable config
+     *
+     * @return SearchResult
+     */
+    public function getSearchResult(): SearchResult
+    {
+        return new SearchResult($this, $this->uuid);
+    }
 
-	/**
+    /**
      * Form relation
      *
      * @return BelongsTo
      */
     public function form()
     {
-    	return $this->belongsTo(Form::class);
+        return $this->belongsTo(Form::class);
     }
 
     /**
@@ -57,6 +57,8 @@ class Answer extends Model implements Searchable {
     public function liquify()
     {
         $this->schema = $this->getSchema();
+
+        if(!is_array($this->form_data)) $this->form_data = json_decode($this->form_data, true);
 
         foreach($this->form_data as $key => $value)
         {
