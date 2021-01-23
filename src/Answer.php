@@ -5,6 +5,7 @@ namespace Umomega\Former;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Searchable\Searchable;
 use Spatie\Searchable\SearchResult;
+use Nuclear\Hierarchy\Content;
 
 class Answer extends Model implements Searchable {
 
@@ -60,9 +61,17 @@ class Answer extends Model implements Searchable {
 
         if(!is_array($this->form_data)) $this->form_data = json_decode($this->form_data, true);
 
-        foreach($this->form_data as $key => $value)
+        foreach($this->schema['fields'] as $name => $d)
         {
-            $this->setAttribute($key, $value);
+            $value = $this->form_data[$name];
+
+            if($d['type'] == 'ContentRelationField') {
+                $value = is_array($value)
+                    ? Content::whereIn('id', $value)->orderByRaw('FIELD (id, ' . implode(', ', $value) . ') ASC')->get()
+                    : [Content::find((int)$value)];
+            }
+
+            $this->setAttribute($name, $value);
         }
 
         return $this;
