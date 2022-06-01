@@ -2,7 +2,7 @@
 	"name": "umomega/former",
 	"description": "Scaffold for Manipulating Custom Forms for umΩ Apps",
 	"keywords": ["umomega", "laravel", "foundation", "php"],
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"license": "MIT",
 	"authors": [
         {

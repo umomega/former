@@ -58,14 +58,14 @@ class Answer extends Model implements Searchable {
     public function liquify()
     {
         $this->schema = $this->getSchema();
-
         if(!is_array($this->form_data)) $this->form_data = json_decode($this->form_data, true);
 
         foreach($this->schema['fields'] as $name => $d)
         {
-            $value = $this->form_data[$name];
+            $value = isset($this->form_data[$name]) ? $this->form_data[$name] : null;
 
             if($d['type'] == 'ContentRelationField') {
+                $value = (is_string($value) && str_starts_with($value, '[')) ? json_decode($value) : $value;
                 $value = is_array($value)
                     ? Content::whereIn('id', $value)->orderByRaw('FIELD (id, ' . implode(', ', $value) . ') ASC')->get()
                     : [Content::find((int)$value)];
