@@ -26,7 +26,12 @@ class Surveyor {
 		$answer->uuid = \Str::uuid();
 		$answer->ip = $request->ip();
 		$answer->status = 30;
-		$answer->form_data = json_encode($validated);
+		
+		if($data = json_encode($validated)) {
+			$answer->form_data = $data;
+		} else {
+			abort(400);
+		}
 
 		$answer->save();
 
